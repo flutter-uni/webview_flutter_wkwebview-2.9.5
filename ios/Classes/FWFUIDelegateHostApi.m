@@ -105,6 +105,17 @@ UIAlertController *alertController = [UIAlertController alertControllerWithTitle
     UIViewController *_viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
   [_viewController presentViewController:alertController animated:YES completion:nil];
 }
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler{
+  UIAlertController *alertController = [UIAlertController alertControllerWithTitle:prompt message:@"" preferredStyle:UIAlertControllerStyleAlert];
+  [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+    textField.text = defaultText;
+  }];
+  [alertController addAction:([UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    completionHandler(alertController.textFields[0].text?:@"");
+  }])];
+  UIViewController *_viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+  [_viewController presentViewController:alertController animated:YES completion:nil];
+}
 @end
 
 @interface FWFUIDelegateHostApiImpl ()
